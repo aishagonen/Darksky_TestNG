@@ -8,14 +8,15 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.qa.darksky.base.BasePage;
-import com.qa.darksky.pages.TodayPage;
+import com.qa.darksky.pages.TodayPageBasic;
 
-public class TodayPageTest {
+
+public class TodayPageBasicTest {
 
 	WebDriver driver;
 	Properties prop;
 	BasePage basePage;
-	TodayPage todayPage;
+	TodayPageBasic todayPageBasic;
 	
 
 	@BeforeTest
@@ -24,23 +25,22 @@ public class TodayPageTest {
 		prop = basePage.initialize_properties();
 		driver = basePage.initialize_driver(prop);
 		driver.get(prop.getProperty("url"));
-		todayPage = new TodayPage(driver);
-		todayPage = todayPage.clickToday();
-	}	
+		todayPageBasic = new TodayPageBasic(driver);								
+	}
 	
 	@Test(priority=1)
 	public void clickTodayTest() {
-		todayPage.clickToday();
+		todayPageBasic.clickToday();
 	}
 	
 	@Test(priority=2)
 	public void verifyLowTempTest() {
-		todayPage.verifyLowTemp();
+		todayPageBasic.verifyLowTemp();
 	}
 	
-	@Test(priority=3)
+	@Test(priority=23)
 	public void verifyHighTempTest() {
-		todayPage.verifyHighTemp();
+		todayPageBasic.verifyHighTemp();
 	}
 	
 	@AfterTest
@@ -48,4 +48,6 @@ public class TodayPageTest {
 		basePage.quitBrowser();
 	}
 		
+	
+	
 }

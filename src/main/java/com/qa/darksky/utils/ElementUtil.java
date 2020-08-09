@@ -1,5 +1,8 @@
 package com.qa.darksky.utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 import org.openqa.selenium.By;
@@ -7,11 +10,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import com.qa.darksky.base.BasePage;
-
-import jdk.internal.org.objectweb.asm.tree.analysis.Value;
-
 
 public class ElementUtil extends BasePage{
 	
@@ -58,12 +59,12 @@ public class ElementUtil extends BasePage{
 	}
 	
 	public void doClick(By locator){
+		waitForElementPresent(locator);
 		try{
 		getElement(locator).click();
 		}
-		catch(Exception e){
-			System.out.println("Some exception occured while click on  webelement " +locator);
-		}
+		catch(Exception e) {}
+		
 	}
 	
 	public void doSendKeys(By locator, String value){
@@ -125,12 +126,12 @@ public class ElementUtil extends BasePage{
 		}
 	}
 	
-	public void compareValues(By Verifiedlocator, By ActualLocator, String value) {
-		String verified = driver.findElement(Verifiedlocator).getText();
+	public void compareValues(By DisplayedLocator, By ActualLocator, String value) {
+		String displayed = driver.findElement(DisplayedLocator).getText();
 		String actual = driver.findElement(ActualLocator).getText();
 			
-		if ((verified.compareTo(actual))==0) {
-			System.out.println(value + " is verified : " + verified);
+		if ((displayed.compareTo(actual))==0) {
+			System.out.println(value + " is verified : " + displayed);
 		} else {
 			System.out.println(value + " is not verified. Actual " + value + " is: " + actual);
 		}
@@ -138,6 +139,55 @@ public class ElementUtil extends BasePage{
 	}
 	
 	
+	public void getVerifyLowest(By listLocator, By lowestLocator ) {
+		waitForElementVisible(listLocator);
+		
+		List<WebElement> list = driver.findElements(listLocator);
+		ArrayList<Integer> arrayList = new ArrayList<Integer>();
+		
+		for (int i = 0; i < list.size(); i++) {
+			arrayList.add(Integer.parseInt(list.get(i).getText().replaceAll("\\D+", "")));		
+		}
+		Collections.sort(arrayList);
+		System.out.println(arrayList);
+		System.out.println(arrayList.get(0));
+		
+		int expectedValue = arrayList.get(0);
+		int actualValue= Integer.parseInt(driver.findElement(lowestLocator).getText().replaceAll("\\D+", ""));
+
+		Assert.assertEquals(actualValue, expectedValue);
+	}
+	
+	public void getVerifyHighest(By listLocator, By highestLocator ) {
+		waitForElementVisible(listLocator);
+		
+		List<WebElement> list = driver.findElements(listLocator);
+		ArrayList<Integer> arrayList = new ArrayList<Integer>();
+		
+		for (int i = 0; i < list.size(); i++) {
+			arrayList.add(Integer.parseInt(list.get(i).getText().replaceAll("\\D+", "")));		
+		}
+		Collections.sort(arrayList);
+		System.out.println(arrayList);
+		int highIndex = arrayList.size()-1;
+		
+		System.out.println(arrayList.get(highIndex));
+		
+		int expectedValue = arrayList.get(highIndex);
+		int actualValue= Integer.parseInt(driver.findElement(highestLocator).getText().replaceAll("\\D+", ""));
+
+		Assert.assertEquals(actualValue, expectedValue);
+	}
+	
+	
 	
 }
+
+
+
+
+
+
+
+
 
